@@ -153,7 +153,6 @@ function setCellsAfterRules(numrows, numcols, gametable){
 }
 
 // Cycle through the cells of the grid and apply the rules of Conway's Game.
-// Exits if all cells die.
 function startGame(){
   // disable the fps and size selects
   document.getElementById("fps-select-id").disabled = true;
@@ -195,7 +194,7 @@ function endGame(){
 
   // re-enable the fps and size select
   document.getElementById("fps-select-id").disabled = false;
-  document.getElementById("size-select-id").disabled = true;
+  document.getElementById("size-select-id").disabled = false;
   // update the game state notification
   document.getElementById("running-notification-id").innerHTML = "Game State: NOT RUNNING";
 }
