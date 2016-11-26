@@ -47,11 +47,25 @@ function countNeighbours(rownum, colnum, numrows, numcols, gametable){
       count += Number(gametable.rows[0].cells[1].dataset.cellIsAlive) ? 1 : 0;
       count += Number(gametable.rows[1].cells[0].dataset.cellIsAlive) ? 1 : 0;
       count += Number(gametable.rows[1].cells[1].dataset.cellIsAlive) ? 1 : 0;
+
+      // periodic boundaries
+      count += Number(gametable.rows[numrows-1].cells[0].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[numrows-1].cells[1].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[numrows-1].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[0].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[1].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
     }else if (colnum === numcols -1){
       // top-right corner
       count += Number(gametable.rows[0].cells[numcols-2].dataset.cellIsAlive) ? 1 : 0;
       count += Number(gametable.rows[1].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
       count += Number(gametable.rows[1].cells[numcols-2].dataset.cellIsAlive) ? 1 : 0;
+
+      // periodic boundries
+      count += Number(gametable.rows[numrows-1].cells[0].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[0].cells[0].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[1].cells[0].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[numrows-1].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[numrows-1].cells[numcols-2].dataset.cellIsAlive) ? 1 : 0;
     }else{
       // top edge
       for(icount = 0; icount <= 1; icount++){
@@ -61,6 +75,11 @@ function countNeighbours(rownum, colnum, numrows, numcols, gametable){
           }
         }
       }
+
+      // periodic boundries
+      for(jcount = colnum - 1; jcount <= colnum + 1; jcount++){
+        count += Number(gametable.rows[numrows-1].cells[jcount].dataset.cellIsAlive) ? 1 : 0;
+      }
     }
   }else if(rownum === numrows - 1){
     if(colnum === 0){
@@ -68,11 +87,25 @@ function countNeighbours(rownum, colnum, numrows, numcols, gametable){
       count += Number(gametable.rows[numrows-2].cells[0].dataset.cellIsAlive) ? 1 : 0;
       count += Number(gametable.rows[numrows-2].cells[1].dataset.cellIsAlive) ? 1 : 0;
       count += Number(gametable.rows[numrows-1].cells[1].dataset.cellIsAlive) ? 1 : 0;
+
+      // periodic boundaries
+      count += Number(gametable.rows[0].cells[0].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[0].cells[1].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[0].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[numrows-1].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[numrows-2].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
     }else if (colnum === numcols -1){
       // bottom-right corner
       count += Number(gametable.rows[numrows-2].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
       count += Number(gametable.rows[numrows-2].cells[numcols-2].dataset.cellIsAlive) ? 1 : 0;
       count += Number(gametable.rows[numrows-1].cells[numcols-2].dataset.cellIsAlive) ? 1 : 0;
+
+      // periodic boundaries
+      count += Number(gametable.rows[0].cells[0].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[0].cells[numcols-2].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[0].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[numrows-1].cells[0].dataset.cellIsAlive) ? 1 : 0;
+      count += Number(gametable.rows[numrows-2].cells[0].dataset.cellIsAlive) ? 1 : 0;
     }else{
       // bottom edge
       for(icount = numrows - 2; icount <= numrows - 1; icount++){
@@ -81,6 +114,11 @@ function countNeighbours(rownum, colnum, numrows, numcols, gametable){
             count += Number(gametable.rows[icount].cells[jcount].dataset.cellIsAlive) ? 1 : 0;
           }
         }
+      }
+
+      // periodic boundries
+      for(jcount = colnum - 1; jcount <= colnum + 1; jcount++){
+        count += Number(gametable.rows[0].cells[jcount].dataset.cellIsAlive) ? 1 : 0;
       }
     }
   }else if(colnum === 0){
@@ -92,6 +130,12 @@ function countNeighbours(rownum, colnum, numrows, numcols, gametable){
         }
       }
     }
+
+
+    // periodic boundries
+    for(icount = rownum - 1; icount <= rownum + 1; icount++){
+      count += Number(gametable.rows[icount].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
+    }
   }else if(colnum === numcols - 1){
     // right edge
     for(icount = rownum - 1; icount <= rownum + 1; icount++){
@@ -100,6 +144,11 @@ function countNeighbours(rownum, colnum, numrows, numcols, gametable){
           count += Number(gametable.rows[icount].cells[jcount].dataset.cellIsAlive) ? 1 : 0;
         }
       }
+    }
+
+    // periodic boundries
+    for(icount = rownum - 1; icount <= rownum + 1; icount++){
+      count += Number(gametable.rows[icount].cells[0].dataset.cellIsAlive) ? 1 : 0;
     }
   }
   else{
@@ -121,19 +170,24 @@ function applyRules(rownum, colnum, numrows, numcols, gametable){
   var count = countNeighbours(rownum, colnum, numrows, numcols, gametable);
   var curcell = gametable.rows[rownum].cells[colnum];
 
+  alert(count);
+
   isalive = Number(curcell.dataset.cellIsAlive);
-  if(!isalive && count === 3){
-    // becomes alive by reproduction
-    curcell.dataset.cellWillBeAlive = 1;
-  }else if(isalive && count < 2){
+  if(isalive && count < 2){
     // dies by under-population
     curcell.dataset.cellWillBeAlive = 0;
-  }else if(isalive && count > 1 && count < 3){
+  }else if(isalive && (count === 2 || count === 3)){
     // lives on
     curcell.dataset.cellWillBeAlive = 1;
   }else if(isalive && count > 3){
     // dies by over-population
     curcell.dataset.cellWillBeAlive = 0;
+  }else if(!isalive && count === 3){
+    // becomes alive by reproduction
+    curcell.dataset.cellWillBeAlive = 1;
+  }else{
+    // dead cells stay dead
+    curcell.dataset.cellWillBeAlive = curcell.dataset.isAlive;
   }
 }
 
@@ -269,7 +323,7 @@ function setGrid(sel){
 
 // Add grid and grid controls
 window.onload = function(){
-  var minsize = 8;
+  var minsize = 3;
   var maxsize = 32;
   var defaultsize = 16;
 
