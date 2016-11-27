@@ -169,9 +169,7 @@ function countNeighbours(rownum, colnum, numrows, numcols, gametable){
 function applyRules(rownum, colnum, numrows, numcols, gametable){
   var count = countNeighbours(rownum, colnum, numrows, numcols, gametable);
   var curcell = gametable.rows[rownum].cells[colnum];
-
-  alert(count);
-
+ 
   isalive = Number(curcell.dataset.cellIsAlive);
   if(isalive && count < 2){
     // dies by under-population
