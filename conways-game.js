@@ -282,7 +282,7 @@ function randomInitial(){
     var numcols = gametable.rows[iRandomInit].cells.length;
     for(jRandomInit = 0; jRandomInit < numcols; jRandomInit++){
       var curcell = gametable.rows[iRandomInit].cells[jRandomInit];
-      if(Math.random() >= 0.5){
+      if(Math.random() >= 0.75){
         setAlive(curcell);
       }else{
         setDead(curcell);
@@ -412,7 +412,7 @@ window.onload = function(){
   gametable.style.border = "thin solid black";
 
   // set fps select optoins
-  for(i = 1; i <= 24; i++){
+  for(i = 1; i <= 30; i++){
     var newoption = document.createElement("OPTION");
     newoption.text = i;
     if(i === 6){
