@@ -1,5 +1,5 @@
 /**
- * This file is a pure JS implemenetation of Conway's Game. It generates the
+ * This file is a pure js implemenetation of Conway's Game. It generates the
  * the neccessary html elements automatically and appends them to the end of
  * the body tag.
  *
@@ -36,128 +36,23 @@
  *
  **/
 
-// Count the number of live neighbours of a cell
+// Apparently javascript doesn't have an actual mod operator, only a remainder
+// operator which does not handle negative numbers the same way as modulus
+ Number.prototype.mod = function(n) {
+    return ((this%n)+n)%n;
+};
+
+// Count the number of live neighbours of a cell, taking periodic boundaries
+// into consideration.
+// Uses modulo to deal with the periodic boundaries.
 function countNeighbours(rownum, colnum, numrows, numcols, gametable){
-  // get the position of the cell (corner, edge, inner), then count the neighbors.
   var count = 0;
-
-  if(rownum === 0){
-    if(colnum === 0){
-      // top-left corner
-      count += Number(gametable.rows[0].cells[1].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[1].cells[0].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[1].cells[1].dataset.cellIsAlive) ? 1 : 0;
-
-      // periodic boundaries
-      count += Number(gametable.rows[numrows-1].cells[0].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[numrows-1].cells[1].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[numrows-1].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[0].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[1].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
-    }else if (colnum === numcols -1){
-      // top-right corner
-      count += Number(gametable.rows[0].cells[numcols-2].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[1].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[1].cells[numcols-2].dataset.cellIsAlive) ? 1 : 0;
-
-      // periodic boundries
-      count += Number(gametable.rows[numrows-1].cells[0].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[0].cells[0].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[1].cells[0].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[numrows-1].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[numrows-1].cells[numcols-2].dataset.cellIsAlive) ? 1 : 0;
-    }else{
-      // top edge
-      for(icount = 0; icount <= 1; icount++){
-        for(jcount = colnum - 1; jcount <= colnum + 1; jcount++){
-          if(!(icount === rownum && jcount === colnum)){
-            count += Number(gametable.rows[icount].cells[jcount].dataset.cellIsAlive) ? 1 : 0;
-          }
-        }
-      }
-
-      // periodic boundries
-      for(jcount = colnum - 1; jcount <= colnum + 1; jcount++){
-        count += Number(gametable.rows[numrows-1].cells[jcount].dataset.cellIsAlive) ? 1 : 0;
-      }
-    }
-  }else if(rownum === numrows - 1){
-    if(colnum === 0){
-      // bottom-left corner
-      count += Number(gametable.rows[numrows-2].cells[0].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[numrows-2].cells[1].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[numrows-1].cells[1].dataset.cellIsAlive) ? 1 : 0;
-
-      // periodic boundaries
-      count += Number(gametable.rows[0].cells[0].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[0].cells[1].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[0].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[numrows-1].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[numrows-2].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
-    }else if (colnum === numcols -1){
-      // bottom-right corner
-      count += Number(gametable.rows[numrows-2].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[numrows-2].cells[numcols-2].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[numrows-1].cells[numcols-2].dataset.cellIsAlive) ? 1 : 0;
-
-      // periodic boundaries
-      count += Number(gametable.rows[0].cells[0].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[0].cells[numcols-2].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[0].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[numrows-1].cells[0].dataset.cellIsAlive) ? 1 : 0;
-      count += Number(gametable.rows[numrows-2].cells[0].dataset.cellIsAlive) ? 1 : 0;
-    }else{
-      // bottom edge
-      for(icount = numrows - 2; icount <= numrows - 1; icount++){
-        for(jcount = colnum - 1; jcount <= colnum + 1; jcount++){
-          if(!(icount === rownum && jcount === colnum)){
-            count += Number(gametable.rows[icount].cells[jcount].dataset.cellIsAlive) ? 1 : 0;
-          }
-        }
-      }
-
-      // periodic boundries
-      for(jcount = colnum - 1; jcount <= colnum + 1; jcount++){
-        count += Number(gametable.rows[0].cells[jcount].dataset.cellIsAlive) ? 1 : 0;
-      }
-    }
-  }else if(colnum === 0){
-    // left edge
-    for(icount = rownum - 1; icount <= rownum + 1; icount++){
-      for(jcount = 0; jcount <= 1; jcount++){
-        if(!(icount === rownum && jcount === colnum)){
-          count += Number(gametable.rows[icount].cells[jcount].dataset.cellIsAlive) ? 1 : 0;
-        }
-      }
-    }
-
-
-    // periodic boundries
-    for(icount = rownum - 1; icount <= rownum + 1; icount++){
-      count += Number(gametable.rows[icount].cells[numcols-1].dataset.cellIsAlive) ? 1 : 0;
-    }
-  }else if(colnum === numcols - 1){
-    // right edge
-    for(icount = rownum - 1; icount <= rownum + 1; icount++){
-      for(jcount = numcols - 2; jcount <= numcols - 1; jcount++){
-        if(!(icount === rownum && jcount === colnum)){
-          count += Number(gametable.rows[icount].cells[jcount].dataset.cellIsAlive) ? 1 : 0;
-        }
-      }
-    }
-
-    // periodic boundries
-    for(icount = rownum - 1; icount <= rownum + 1; icount++){
-      count += Number(gametable.rows[icount].cells[0].dataset.cellIsAlive) ? 1 : 0;
-    }
-  }
-  else{
-    // inner cells
-    for(icount = rownum - 1; icount <= rownum + 1; icount++){
-      for(jcount = colnum - 1; jcount <= colnum + 1; jcount++){
-        if(!(icount === rownum && jcount === colnum)){
-          count += Number(gametable.rows[icount].cells[jcount].dataset.cellIsAlive) ? 1 : 0;
-        }
+  for(icount = rownum - 1; icount <= rownum + 1; icount++){
+    for(jcount = colnum - 1; jcount <= colnum + 1; jcount++){
+      curi = icount.mod(numrows);
+      curj = jcount.mod(numcols);
+      if(!(curi === rownum && curj === colnum)){
+        count += Number(gametable.rows[curi].cells[curj].dataset.cellIsAlive) ? 1 : 0;
       }
     }
   }
@@ -169,7 +64,8 @@ function countNeighbours(rownum, colnum, numrows, numcols, gametable){
 function applyRules(rownum, colnum, numrows, numcols, gametable){
   var count = countNeighbours(rownum, colnum, numrows, numcols, gametable);
   var curcell = gametable.rows[rownum].cells[colnum];
- 
+  alert(count);
+
   isalive = Number(curcell.dataset.cellIsAlive);
   if(isalive && count < 2){
     // dies by under-population
